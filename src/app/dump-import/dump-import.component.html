@@ -1,0 +1,55 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+<br>
+<div class="container">
+  <form (ngSubmit)="onSubmit()" #connectionForm="ngForm">
+    <div>
+      <div class="form-group col s3">
+        <label for="username" class="control-label required">Enter Username</label>
+        <input type="text" class="form-control" id="username" required [(ngModel)]="model.username" name="username" placeholder="fkbaro">
+      </div>
+      <div class="form-group col s3">
+        <label for="password">Enter Password</label>
+        <input type="password" class="form-control" id="password" required [(ngModel)]="model.password" name="password" placeholder="fkbaro">
+      </div>
+      <div class="form-group col s3">
+        <label for="db">Enter DB-Instance</label>
+        <input type="text" class="form-control" id="db" required [(ngModel)]="model.db" name="db" placeholder="flskddb">
+      </div>
+    </div>
+    <div>
+      <div class="form-group col s3">
+        <label for="extusername" class="control-label required">Enter Extern Username</label>
+        <input type="text" class="form-control" id="extusername" required [(ngModel)]="model.extusername" name="extusername" placeholder="fk">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="dump" class="control-label required">Path + Dumpfile</label>
+      <input type="text" class="form-control" id="dump" required [(ngModel)]="model.dump" name="dump" placeholder="C:/full_imp.dmp">
+    </div>
+    <!--
+    <div>
+      <label for="dump" class="control-label required">Dumpfile</label>
+      <input id="dump" [(ngModel)]="model.dump" name="dump" type="file" size="50" accept="text/*">
+
+    </div>
+    -->
+    <div class="col s12">
+      <button type="submit" class="btn waves-effect waves-light" [disabled]="!connectionForm.form.valid">Import</button>
+    </div>
+    <div *ngIf="submitted">
+      <h3>Start Importing Dump-File</h3>
+      <div class="preloader-wrapper small active">
+        <div class="spinner-layer spinner-green-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
