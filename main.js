@@ -11,6 +11,41 @@ function createWindow () {
     icon: `file://${__dirname}/dist/assets/logo.png`
   })
 
+  console.log('TEST');
+  var oracledb = require('oracledb');
+  //var oracledb = require('C:\\Users\\Noel\\Documents\\Repository\\Test\\angular-electron\\node_modules\\oracledb\\build\\Release\\oracledb.node');
+  oracledb.getConnection({
+    user: "fls",
+    password: "fls",
+    connectString: "localhost/xe"
+  }, function(err, connection) {
+    if (err) {
+      console.error(err.message);
+      return;
+    }
+    connection.execute( "SELECT * from TEST",
+      [],
+      function(err, result) {
+        if (err) {
+          console.error(err.message);
+          doRelease(connection);
+          return;
+        }
+        console.log(result.metaData);
+        console.log(result.rows);
+        doRelease(connection);
+      });
+  });
+
+  function doRelease(connection) {
+    connection.release(
+      function(err) {
+        if (err) {console.error(err.message);}
+      }
+    );
+  }
+
+
 
   win.loadURL(`file://${__dirname}/dist/index.html`)
 
