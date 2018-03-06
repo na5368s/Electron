@@ -41,6 +41,7 @@
     "node-command-line": "^1.0.2",
     "oracledb": "github:oracle/node-oracledb#v2.1.2",
     "rxjs": "^5.5.6",
+    "tns": "^0.1.0",
     "underscore": "^1.8.3",
     "zone.js": "^0.8.19"
   },

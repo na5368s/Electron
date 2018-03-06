@@ -4,6 +4,11 @@ const _knex = (<any>window).require("knex");
 const _oracledb = (<any>window).require("oracledb");
 const _execa = (<any>window).require("execa");
 const _fs = (<any>window).require("fs");
+const _tns = (<any>window).require("tns");
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/interval';
+var cmd = (<any>window).require("node-command-line"),
+    Promise = (<any>window).require("bluebird");
 
 @Component({
   selector: 'app-dump-export',
@@ -21,13 +26,19 @@ export class DumpExportComponent implements OnInit {
     if (check) {
       console.log('LIB');
 
+      /*_fs.readFile('tnsnames.ora','utf8', (err, contents) => {
+        if(err) throw err;
+        console.log(contents);
+        //const ast = _tns(contents);
+        //console.log(ast);
+      })*/
 
       var knex = _knex({
         client: 'oracledb',
         connection: {
           host: 'srv-db-fls',
-          user: 'ly',
-          password: 'ly',
+          user: 'fkbaro2',
+          password: 'fkbaro2',
           database: 'FLSKDDB.FLS.DE',
 
         }
@@ -42,60 +53,60 @@ export class DumpExportComponent implements OnInit {
         console.log(resp);
       })
 
-      query = 'set serveroutput on;';
-      knex.raw(query).then(function(resp) {
-        console.log(resp);
-      })
 
-      _fs.readFile('Pruefe_Update.sql', "utf8", (err, data) => {
+      /*_fs.readFile('Pruefe_Update.sql', "utf8", (err, data) => {
         if(err) throw err;
-        knex.raw(data).debug([true]).then(function(resp) {
+        knex.raw(data).then(function(resp) {
           console.log(resp);
         })
-      })
+      })*/
+
+      // GET DATA_PUMP_DIR
+      knex.select('DIRECTORY_PATH').from('DBA_DIRECTORIES').where('DIRECTORY_NAME','DATA_PUMP_DIR').then(function (result) {
+        console.log(result);
+      });
 
 
-      /*_oracledb.getConnection({
-        user: 'fls',
-        password: 'fls',
-        connectString: 'localhost/xe'
-      }, function(err, connection) {
-        if (err) {
-          console.error(err.message);
-          return;
+// Execute ExpDP and check if successfull
+
+
+
+       this.submitted = true;
+
+      const myObservable = Observable.of(cmd.run('expdp fkbaro2/fkbaro2@flskddb DUMPFILE=baro2.dmp'));
+
+      const myObserver = {
+        next: x => console.log('Observable: ' + x),
+        error: err => console.error('Oberserver got an error: ' + err),
+        complete: () => this.submitted = false,
+      };
+
+      myObservable.subscribe(myObserver);
+      /*Promise.coroutine(function (){
+        // var response = cmd.run('expdp fkbaro2/fkbaro2@flskddb DUMPFILE=baro2.dmp');
+         var response = cmd.run('node --version');
+        if(response.success) {
+          // do something
+          // if success get stdout info in message. like response.message
+          console.log('Doooo');
+        } else {
+          console.log('Dont');
+          // do something
+          // if not success get error message and stdErr info as error and stdErr.
+          //like response.error and response.stdErr
         }
-        connection.execute( 'SELECT * from TEST',
-          [],
-          function(error, result) {
-            if (error) {
-              console.error(error.message);
-              return;
-            }
-            console.log(result.metaData);
-            console.log(result.rows);
-          });
-      });*/
-/*
+        console.log('Executed your command :)');
+        this.submitted = false;
+      })*/
 
-      const knex = _knex({
-        client: _oracledb,
-        connection: {
-          host: 'localhost',
-          user: 'fls',
-          password: 'fls',
-          database: 'xe'
-        }
-      })
-       knex.raw('select * from TEST').then(function () {
-       console.log('RIGHT');
-       });
-*/
-      this.submitted = true;
+
+
+
       this.model.executeConnection();
     } else {
       console.log('Fehler bei der Verbindung');
     }
-
+    _knex.destroy();
   }
 
   constructor() { }
