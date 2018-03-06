@@ -12,18 +12,47 @@ function createWindow () {
   })
 
   console.log('TEST');
-  var oracledb = require('oracledb');
+  //var oracledb = require('oracledb');
+  var knex = require('knex')({
+    client: 'oracledb',
+    connection: {
+      host: 'srv-db-fls',
+      user: 'ly',
+      password: 'ly',
+      database: 'FLSKDDB.FLS.DE'
+    }
+  });
+  console.log('GGGGG');
+  if(knex) {
+    console.log('connected');
+  }else {
+    console.log('Connection failed');
+  }
+  var query = 'select username from SY_USER';
+  knex.raw(query).then(function(resp) {
+    console.log(resp);
+  })
+
+  var _fs = require("fs");
+  _fs.readFile('Test.sql', "utf8", (err, data) => {
+    if(err) throw err;
+    // console.log(data);
+    knex.raw(data).then(function(resp) {
+      console.log(resp);
+    })
+  })
   //var oracledb = require('C:\\Users\\Noel\\Documents\\Repository\\Test\\angular-electron\\node_modules\\oracledb\\build\\Release\\oracledb.node');
-  oracledb.getConnection({
-    user: "fls",
-    password: "fls",
-    connectString: "localhost/xe"
+  /*oracledb.getConnection({
+    host: 'srv-db-fls',
+    user: "fkleer",
+    password: "fkleer",
+    database: "FLSKDDB"
   }, function(err, connection) {
     if (err) {
       console.error(err.message);
       return;
     }
-    connection.execute( "SELECT * from TEST",
+    connection.execute( "SELECT username from SY_USER;",
       [],
       function(err, result) {
         if (err) {
@@ -31,6 +60,7 @@ function createWindow () {
           doRelease(connection);
           return;
         }
+        console.log('Statement');
         console.log(result.metaData);
         console.log(result.rows);
         doRelease(connection);
@@ -45,7 +75,7 @@ function createWindow () {
     );
   }
 
-
+*/
 
   win.loadURL(`file://${__dirname}/dist/index.html`)
 

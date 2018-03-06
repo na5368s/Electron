@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Connection } from '../connection';
-import * as _knex from 'knex';
-// import * as _oracledb from 'oracledb';
+const _knex = (<any>window).require("knex");
+const _oracledb = (<any>window).require("oracledb");
+const _execa = (<any>window).require("execa");
+const _fs = (<any>window).require("fs");
 
 @Component({
   selector: 'app-dump-export',
@@ -19,9 +21,41 @@ export class DumpExportComponent implements OnInit {
     if (check) {
       console.log('LIB');
 
-      /*
-      const oracledb = _oracledb;
-      oracledb.getConnection({
+
+      var knex = _knex({
+        client: 'oracledb',
+        connection: {
+          host: 'srv-db-fls',
+          user: 'ly',
+          password: 'ly',
+          database: 'FLSKDDB.FLS.DE',
+
+        }
+      });
+      if(knex) {
+        console.log('connected');
+      }else {
+        console.log('Connection failed');
+      }
+      var query = 'select username from SY_USER';
+      knex.raw(query).then(function(resp) {
+        console.log(resp);
+      })
+
+      query = 'set serveroutput on;';
+      knex.raw(query).then(function(resp) {
+        console.log(resp);
+      })
+
+      _fs.readFile('Pruefe_Update.sql', "utf8", (err, data) => {
+        if(err) throw err;
+        knex.raw(data).debug([true]).then(function(resp) {
+          console.log(resp);
+        })
+      })
+
+
+      /*_oracledb.getConnection({
         user: 'fls',
         password: 'fls',
         connectString: 'localhost/xe'
@@ -40,8 +74,7 @@ export class DumpExportComponent implements OnInit {
             console.log(result.metaData);
             console.log(result.rows);
           });
-      });
-*/
+      });*/
 /*
 
       const knex = _knex({
