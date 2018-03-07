@@ -21,11 +21,13 @@ export class DumpExportComponent implements OnInit {
   submitted = false;
   connecting = false;
   error = false;
+  success = false;
 
   onSubmit() {
     this.error = false;
     this.submitted = true;
     this.connecting = true;
+    this.success = false;
     this.model.checkConnection();
     setTimeout(() => {
       if (this.model.isConnected) {
@@ -46,10 +48,14 @@ export class DumpExportComponent implements OnInit {
     const myObserver2 = {
       complete: () => this.error = true,
     };
+    const myObserver3 = {
+      complete: () => this.success = true,
+    };
     const commandline = 'expdp ' + this.model.username + '/' + this.model.password + '@' + this.model.db + ' DUMPFILE=' + this.model.dump;
     cmd.get(commandline, function(err, data, stderr) {
         if (!err) {
             myObservable.subscribe(myObserver1);
+            myObservable.subscribe(myObserver3);
         } else {
             myObservable.subscribe(myObserver1);
             myObservable.subscribe(myObserver2);

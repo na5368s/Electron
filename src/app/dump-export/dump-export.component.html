@@ -54,6 +54,9 @@
         </div>
       </div>
     </ng-template>
+    <div *ngIf="success">
+      <h3>Exporting Dump-File Successful</h3>
+    </div>
     <div *ngIf="error && !connecting && submitted; else exportError">
       <h3>Connection Failed</h3>
     </div>
