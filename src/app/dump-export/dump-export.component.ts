@@ -6,8 +6,7 @@ const _execa = (<any>window).require("execa");
 const _fs = (<any>window).require("fs");
 const _tns = (<any>window).require("tns");
 import { Observable } from 'rxjs';
-import 'rxjs/add/observable/interval';
-var cmd = (<any>window).require("node-command-line"),
+var cmd = (<any>window).require("node-cmd"),
     Promise = (<any>window).require("bluebird");
 
 @Component({
@@ -73,15 +72,22 @@ export class DumpExportComponent implements OnInit {
 
        this.submitted = true;
 
-      const myObservable = Observable.of(cmd.run('expdp fkbaro2/fkbaro2@flskddb DUMPFILE=baro2.dmp'));
+      //const myObservable = Observable.of(cmd.run('expdp fkbaro2/fkbaro2@flskddb DUMPFILE=baro2.dmp'));
+
+ /*     const myO = Observable.of(cmd.run('expdp fkbaro2/fkbaro2@flskddb DUMPFILE=baro2.dmp')).concat( () => {
+        console.log('done');
+      });
 
       const myObserver = {
         next: x => console.log('Observable: ' + x),
         error: err => console.error('Oberserver got an error: ' + err),
-        complete: () => this.submitted = false,
+        complete: () => console.log('Observer got a complete notification'),
       };
 
-      myObservable.subscribe(myObserver);
+      myO.subscribe(myObserver);*/
+
+      this.dumpexport();
+
       /*Promise.coroutine(function (){
         // var response = cmd.run('expdp fkbaro2/fkbaro2@flskddb DUMPFILE=baro2.dmp');
          var response = cmd.run('node --version');
@@ -106,7 +112,16 @@ export class DumpExportComponent implements OnInit {
     } else {
       console.log('Fehler bei der Verbindung');
     }
-    _knex.destroy();
+  }
+
+  dumpexport() {
+      cmd.get('node --version',function(err, data, stderr) {
+          if(!err) {
+              console.log('Erfolgreich:');
+          } else {
+              console.log('Error');
+          }
+      });
   }
 
   constructor() { }
