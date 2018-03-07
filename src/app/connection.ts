@@ -1,5 +1,8 @@
+const _knex = (<any>window).require('knex');
+
 export class Connection {
 
+  isConnected = false;
   constructor(
     public username: string,
     public password: string,
@@ -9,21 +12,20 @@ export class Connection {
   ) { }
 
   checkConnection() {
-    // console.log(oracledb);
-    const check = true;
+    const knex = _knex({
+      client: 'oracledb',
+      connection: {
+        host: 'localhost',
+        user: this.username,
+        password: this.password,
+        database: this.db,
 
-    if (check === true) {
-      console.log('Connection successful.');
-      return true;
-    }
-    return false;
+      }
+    });
+    this.isConnected = true;
+    knex.raw('select * from Test').catch(err => {
+      this.isConnected = false;
+    });
   }
 
-  executeConnection() {
-    // console.log(oracledb);
-
-    console.log('Execute Dump-Export');
-
-    return 0;
-  }
 }

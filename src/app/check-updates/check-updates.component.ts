@@ -15,7 +15,7 @@ export class CheckUpdatesComponent implements OnInit {
   onSubmit() {
     const check = this.model.checkConnection();
     if (check) {
-      this.model.executeConnection();
+
     } else {
       console.log('Fehler bei der Verbindung');
     }

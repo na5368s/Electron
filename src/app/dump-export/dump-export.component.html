@@ -17,14 +17,15 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="dump" class="control-label required">Path + Dumpfile</label>
-      <input type="text" class="form-control" id="dump" required [(ngModel)]="model.dump" name="dump" placeholder="C:/full_exp.dmp">
+      <label for="dump" class="control-label required">Dumpfile-Name</label>
+      <input type="text" class="form-control" id="dump" required [(ngModel)]="model.dump" name="dump" placeholder="full_exp">
     </div>
+
     <div class="col s12">
       <button type="submit" class="btn waves-effect waves-light" [disabled]="!connectionForm.form.valid">Export</button>
     </div>
-    <div *ngIf="submitted">
-      <h3>Start Exporting Dump-File</h3>
+    <div *ngIf="connecting && submitted && !error; else export">
+      <h3>Check Connection</h3>
       <div class="preloader-wrapper small active">
         <div class="spinner-layer spinner-green-only">
           <div class="circle-clipper left">
@@ -37,6 +38,32 @@
         </div>
       </div>
     </div>
+    <ng-template #export>
+      <div *ngIf="!connecting && submitted && !error">
+        <h3>Exporting Dump-File</h3>
+        <div class="preloader-wrapper small active">
+          <div class="spinner-layer spinner-green-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+            <div class="circle"></div>
+          </div><div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <div *ngIf="error && !connecting && submitted; else exportError">
+      <h3>Connection Failed</h3>
+    </div>
+    <ng-template #exportError>
+      <div *ngIf="error && !submitted">
+        <h3>Exporting Dump-File Failed</h3>
+      </div>
+    </ng-template>
+
+
 
   </form>
 </div>

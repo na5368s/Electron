@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Connection } from '../connection';
-const _knex = (<any>window).require("knex");
-const _oracledb = (<any>window).require("oracledb");
-const _execa = (<any>window).require("execa");
-const _fs = (<any>window).require("fs");
-const _tns = (<any>window).require("tns");
-import { Observable } from 'rxjs';
-var cmd = (<any>window).require("node-cmd"),
-    Promise = (<any>window).require("bluebird");
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+const _knex = (<any>window).require('knex');
+const _oracledb = (<any>window).require('oracledb');
+const _execa = (<any>window).require('execa');
+const _fs = (<any>window).require('fs');
+const cmd = (<any>window).require('node-cmd');
+
 
 @Component({
   selector: 'app-dump-export',
@@ -19,109 +19,43 @@ export class DumpExportComponent implements OnInit {
   model = new Connection('', '', '', '', '');
 
   submitted = false;
+  connecting = false;
+  error = false;
 
   onSubmit() {
-    const check = this.model.checkConnection();
-    if (check) {
-      console.log('LIB');
-
-      /*_fs.readFile('tnsnames.ora','utf8', (err, contents) => {
-        if(err) throw err;
-        console.log(contents);
-        //const ast = _tns(contents);
-        //console.log(ast);
-      })*/
-
-      var knex = _knex({
-        client: 'oracledb',
-        connection: {
-          host: 'srv-db-fls',
-          user: 'fkbaro2',
-          password: 'fkbaro2',
-          database: 'FLSKDDB.FLS.DE',
-
-        }
-      });
-      if(knex) {
-        console.log('connected');
-      }else {
-        console.log('Connection failed');
+    this.error = false;
+    this.submitted = true;
+    this.connecting = true;
+    this.model.checkConnection();
+    setTimeout(() => {
+      if (this.model.isConnected) {
+        this.connecting = false;
+        this.dumpexport();
+      } else {
+        this.error = true;
+        this.connecting = false;
       }
-      var query = 'select username from SY_USER';
-      knex.raw(query).then(function(resp) {
-        console.log(resp);
-      })
-
-
-      /*_fs.readFile('Pruefe_Update.sql', "utf8", (err, data) => {
-        if(err) throw err;
-        knex.raw(data).then(function(resp) {
-          console.log(resp);
-        })
-      })*/
-
-      // GET DATA_PUMP_DIR
-      knex.select('DIRECTORY_PATH').from('DBA_DIRECTORIES').where('DIRECTORY_NAME','DATA_PUMP_DIR').then(function (result) {
-        console.log(result);
-      });
-
-
-// Execute ExpDP and check if successfull
-
-
-
-       this.submitted = true;
-
-      //const myObservable = Observable.of(cmd.run('expdp fkbaro2/fkbaro2@flskddb DUMPFILE=baro2.dmp'));
-
- /*     const myO = Observable.of(cmd.run('expdp fkbaro2/fkbaro2@flskddb DUMPFILE=baro2.dmp')).concat( () => {
-        console.log('done');
-      });
-
-      const myObserver = {
-        next: x => console.log('Observable: ' + x),
-        error: err => console.error('Oberserver got an error: ' + err),
-        complete: () => console.log('Observer got a complete notification'),
-      };
-
-      myO.subscribe(myObserver);*/
-
-      this.dumpexport();
-
-      /*Promise.coroutine(function (){
-        // var response = cmd.run('expdp fkbaro2/fkbaro2@flskddb DUMPFILE=baro2.dmp');
-         var response = cmd.run('node --version');
-        if(response.success) {
-          // do something
-          // if success get stdout info in message. like response.message
-          console.log('Doooo');
-        } else {
-          console.log('Dont');
-          // do something
-          // if not success get error message and stdErr info as error and stdErr.
-          //like response.error and response.stdErr
-        }
-        console.log('Executed your command :)');
-        this.submitted = false;
-      })*/
-
-
-
-
-      this.model.executeConnection();
-    } else {
-      console.log('Fehler bei der Verbindung');
-    }
+    }, 1000);
   }
 
   dumpexport() {
-      cmd.get('node --version',function(err, data, stderr) {
-          if(!err) {
-              console.log('Erfolgreich:');
-          } else {
-              console.log('Error');
-          }
-      });
+    const myObservable = Observable.of();
+    const myObserver1 = {
+       complete: () => this.submitted = false,
+     };
+    const myObserver2 = {
+      complete: () => this.error = true,
+    };
+    const commandline = 'expdp ' + this.model.username + '/' + this.model.password + '@' + this.model.db + ' DUMPFILE=' + this.model.dump;
+    cmd.get(commandline, function(err, data, stderr) {
+        if (!err) {
+            myObservable.subscribe(myObserver1);
+        } else {
+            myObservable.subscribe(myObserver1);
+            myObservable.subscribe(myObserver2);
+        }
+    });
+
   }
 
   constructor() { }
