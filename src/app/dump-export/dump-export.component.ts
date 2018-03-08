@@ -57,6 +57,7 @@ export class DumpExportComponent implements OnInit {
             myObservable.subscribe(myObserver1);
             myObservable.subscribe(myObserver3);
         } else {
+            console.log(err);
             myObservable.subscribe(myObserver1);
             myObservable.subscribe(myObserver2);
         }

@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  logo = require('../../assets/img/UpdateLogo.jpg');
   title = 'Update-Manager';
 }
