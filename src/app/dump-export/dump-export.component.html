@@ -24,8 +24,8 @@
     <div class="col s12">
       <button type="submit" class="btn waves-effect waves-light" [disabled]="!connectionForm.form.valid">Export</button>
     </div>
-    <div *ngIf="connecting && submitted && !error; else export">
-      <h3>Check Connection</h3>
+    <div *ngIf="submitted">
+      <h3>Exporting</h3>
       <div class="preloader-wrapper small active">
         <div class="spinner-layer spinner-green-only">
           <div class="circle-clipper left">
@@ -38,35 +38,5 @@
         </div>
       </div>
     </div>
-    <ng-template #export>
-      <div *ngIf="!connecting && submitted && !error">
-        <h3>Exporting Dump-File</h3>
-        <div class="preloader-wrapper small active">
-          <div class="spinner-layer spinner-green-only">
-            <div class="circle-clipper left">
-              <div class="circle"></div>
-            </div><div class="gap-patch">
-            <div class="circle"></div>
-          </div><div class="circle-clipper right">
-            <div class="circle"></div>
-          </div>
-          </div>
-        </div>
-      </div>
-    </ng-template>
-    <div *ngIf="success">
-      <h3>Exporting Dump-File Successful</h3>
-    </div>
-    <div *ngIf="error && !connecting && submitted; else exportError">
-      <h3>Connection Failed</h3>
-    </div>
-    <ng-template #exportError>
-      <div *ngIf="error && !submitted">
-        <h3>Exporting Dump-File Failed</h3>
-      </div>
-    </ng-template>
-
-
-
   </form>
 </div>
