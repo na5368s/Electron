@@ -8,7 +8,7 @@ import { Connection } from '../connection';
 })
 export class DumpImportComponent implements OnInit {
 
-  model = new Connection('', '', '', '', '');
+  model = new Connection('', '', '', '', '', '', '');
 
   submitted = false;
 

@@ -22,7 +22,7 @@
     </div>
 
     <div class="col s12">
-      <button type="submit" class="btn waves-effect waves-light" [disabled]="!connectionForm.form.valid">Export</button>
+      <button type="submit" class="btn waves-effect waves-light" [disabled]="!connectionForm.form.valid">Export {{submitted}}</button>
     </div>
     <div *ngIf="submitted">
       <h3>Exporting</h3>
@@ -37,6 +37,9 @@
         </div>
         </div>
       </div>
+    </div>
+    <div *ngIf="success">
+      <h3>Exporting Success</h3>
     </div>
   </form>
 </div>
