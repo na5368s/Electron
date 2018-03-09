@@ -8,7 +8,7 @@ import { Connection } from '../connection';
 })
 export class CheckUpdatesComponent implements OnInit {
 
-  model = new Connection('', '', '', '', '', '', '');
+  model = new Connection('', '', '', '', '', '', '', '');
 
   submitted = false;
 

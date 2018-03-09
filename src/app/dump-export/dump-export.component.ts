@@ -24,7 +24,7 @@ const _tns = (<any>window).require('tns');
 
 export class DumpExportComponent implements OnInit {
 
-  model = new Connection('fls', 'fls', 'xe', '', '', 'a', 'fls2');
+  model = new Connection('system', 'fls6n7km1', 'flskddb', '', '', '', 'ly', 'ly');
 
   submitted = false;
   success = false;
@@ -59,7 +59,8 @@ export class DumpExportComponent implements OnInit {
 
   dumpexport(): Observable<ChildProcess> {
     console.log('Dump-Export');
-    const commandLine = `expdp ${this.model.username}/${this.model.password}@${this.model.db} DUMPFILE=${this.model.dump}`;
+    const commandLine = `expdp ${this.model.username}/${this.model.password}@${this.model.db} SCHEMAS=${this.model.schemaname} DUMPFILE=${this.model.dump}`;
+    console.log(commandLine);
     const bat: ChildProcess = spawn('cmd.exe', ['/c', commandLine]);
 
     return new Observable(obs => {

@@ -1,8 +1,1 @@
-CREATE OR REPLACE PROCEDURE TEST(param1 IN VARCHAR2)
-IS
-BEGIN
-
-  DBMS_OUTPUT.PUT_LINE('Hello World IN parameter ' || param1);
-
-END;
-/
+EXEC DBMS_UTILITY.compile_schema(schema => 'DEV_LY');
