@@ -30,7 +30,7 @@ export class DumpImportComponent implements OnInit {
         this.model.setTnsHostName()
             .pipe(concatMap(() => this.model.setTnsServiceName()))
             .pipe(concatMap(() => this.model.checkConnection()))
-           // .pipe(concatMap(() => this.model.dropUser()))
+            .pipe(concatMap(() => this.model.dropUser()))
             .pipe(concatMap(() => this.dumpimport()))
             .pipe(concatMap(() => this.model.changePasswordfromUser()))
             .pipe(concatMap(() => this.executePackDS()))

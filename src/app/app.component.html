@@ -5,18 +5,18 @@
   <nav class="card-panel grey darken-3">
     <div class="nav-wrapper">
       <ul id="nav-mobile" class="left hide-on-med-and-down">
-        <li><a routerLink="/export" class="waves-effect waves-light btn">Dump Export</a></li>
-        <li><a routerLink="/import" class="waves-effect waves-light btn">Dump Import</a></li>
-        <li><a routerLink="/check-updates" class="waves-effect waves-light btn">Check Updates</a></li>
-        <li><a routerLink="/prepare-upgrade" class="waves-effect waves-light btn">Prepare Upgrade</a></li>
-        <li><a routerLink="/upgrade" class="waves-effect waves-light btn">Upgrade</a></li>
+        <li><a (click)="setLogo()" routerLink="/export" class="waves-effect waves-light btn">Dump Export</a></li>
+        <li><a (click)="setLogo()" routerLink="/import" class="waves-effect waves-light btn">Dump Import</a></li>
+        <li><a (click)="setLogo()" routerLink="/check-updates" class="waves-effect waves-light btn">Check Updates</a></li>
+        <li><a (click)="setLogo()" routerLink="/prepare-upgrade" class="waves-effect waves-light btn">Prepare Upgrade</a></li>
+        <li><a (click)="setLogo()" routerLink="/upgrade" class="waves-effect waves-light btn">Upgrade</a></li>
       </ul>
     </div>
   </nav>
   <router-outlet></router-outlet>
   <app-messages></app-messages>
   <br>
-  <img [src]="logo">
+  <img *ngIf="showLogo" [src]="logo">
 </div>
 
 
