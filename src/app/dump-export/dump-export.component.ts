@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Connection} from '../connection';
 import {Observable} from 'rxjs/Observable';
 
@@ -41,6 +41,7 @@ export class DumpExportComponent implements OnInit {
         console.log('submitted', res);
         this.submitted = false;
         this.success = true;
+        this._cdRef.detectChanges();
         console.log(this.submitted);
       }, res => {
         console.log('Verbindung fehlgeschlagen: ' + res);
@@ -81,7 +82,7 @@ export class DumpExportComponent implements OnInit {
     });
   }
 
-  constructor() {
+  constructor(private _cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit() {
