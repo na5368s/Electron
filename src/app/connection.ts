@@ -121,6 +121,7 @@ export class Connection {
 
             } else {
                 console.log('User doesnt exist');
+                temp.userexist = false;
             }
         }))
             .pipe(catchError(err => {

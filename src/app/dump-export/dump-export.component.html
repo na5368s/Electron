@@ -4,42 +4,36 @@
   <form (ngSubmit)="onSubmit()" #connectionForm="ngForm">
     <div>
       <h5>Login-Credentials:</h5>
-      <div>
-        <div class="form-group col s3">
-          <label for="username" class="control-label required">Enter System-Username</label>
-          <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="username" required [(ngModel)]="model.username"
-                 name="username" placeholder="fk">
-        </div>
-        <div class="form-group col s3">
-          <label for="password">Enter Password</label>
-          <input [disabled]="submitted" style="text-align: center" type="password" class="form-control" id="password" required [(ngModel)]="model.password"
-                 name="password" placeholder="fk">
-        </div>
-        <div class="form-group col s3">
-          <label for="db">Enter DB-Instance</label>
-          <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="db" required [(ngModel)]="model.db" name="db"
-                 placeholder="orafk">
-        </div>
-      </div>
+      <label for="username" class="control-label required">Enter System-Username</label>
+      <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="username" required
+             [(ngModel)]="model.username"
+             name="username" placeholder="fk">
+      <label for="password">Enter Password</label>
+      <input [disabled]="submitted" style="text-align: center" type="password" class="form-control" id="password"
+             required [(ngModel)]="model.password"
+             name="password" placeholder="fk">
+      <label for="db">Enter DB-Instance</label>
+      <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="db" required
+             [(ngModel)]="model.db" name="db"
+             placeholder="orafk">
     </div>
     <div>
       <h5>Export-Data:</h5>
-      <div class="form-group">
-        <label for="schemaname" class="control-label required">Enter From-Username</label>
-        <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="schemaname" required [(ngModel)]="model.schemaname"
-               name="schemaname"
-               placeholder="full_exp">
-      </div>
-      <div class="form-group">
-        <label for="dump" class="control-label required">Dumpfile-Name</label>
-        <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="dump" required [(ngModel)]="model.dump" name="dump"
-               placeholder="full_exp">
-      </div>
+      <label for="schemaname" class="control-label required">Enter From-Username</label>
+      <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="schemaname" required
+             [(ngModel)]="model.schemaname"
+             name="schemaname"
+             placeholder="full_exp">
+      <label for="dump" class="control-label required">Dumpfile-Name</label>
+      <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="dump" required
+             [(ngModel)]="model.dump" name="dump"
+             placeholder="full_exp">
     </div>
 
-    <div class="col s12">
-      <button type="submit" class="btn waves-effect waves-light" [disabled]="!connectionForm.form.valid">Export</button>
-    </div>
+    <button type="submit" class="btn waves-effect waves-light" [disabled]="!connectionForm.form.valid && submitted">
+      Export
+    </button>
+
     <div *ngIf="submitted">
       <h3>Exporting</h3>
       <div class="progress">
@@ -48,6 +42,9 @@
     </div>
     <div *ngIf="success">
       <h3>Exporting Success</h3>
+    </div>
+    <div *ngIf="failed">
+      <h3>Exporting Failed</h3>
     </div>
   </form>
 </div>

@@ -17,75 +17,79 @@ const _tns = (<any>window).require('tns');
 
 
 @Component({
-    selector: 'app-dump-export',
-    templateUrl: './dump-export.component.html',
-    styleUrls: ['./dump-export.component.css']
+  selector: 'app-dump-export',
+  templateUrl: './dump-export.component.html',
+  styleUrls: ['./dump-export.component.css']
 })
 
 export class DumpExportComponent implements OnInit {
 
-    model = new Connection('system', 'fls6n7km1', 'flskddb', '', '', '', 'ly', 'ly');
+  model = new Connection('system', 'fls6n7km1', 'flskddb', '', '', '', 'ly', 'ly');
 
-    submitted = false;
-    success = false;
+  submitted = false;
+  success = false;
+  failed = false;
 
-    onSubmit() {
-        this.success = false;
-        this.submitted = true;
+  onSubmit() {
+    this.success = false;
+    this.failed = false;
+    this.submitted = true;
 
-        this.model.setTnsHostName()
-            .pipe(concatMap(() => this.model.setTnsServiceName()),
-                concatMap(() => this.model.checkConnection()),
-                concatMap(() => this.dumpexport()))
-            .subscribe(res => {
-                console.log('submitted', res);
-                this.submitted = false;
-                this.success = true;
-                this._cdRef.detectChanges();
-                console.log(this.submitted);
-            }, res => {
-                console.log('Verbindung fehlgeschlagen: ' + res);
-                this.submitted = false;
-            });
-        /*this.model.checkConnection()
-          .pipe(concatMap(() => this.dumpexport()))
-          .subscribe(res => {
-            console.log('submitted', res);
-            this.submitted = false;
-          }, res => {
-            this.submitted = false;
-            console.log('Verbindung fehlgeschlagen:' + res);
-          });*/
-    }
+    this.model.setTnsHostName()
+      .pipe(concatMap(() => this.model.setTnsServiceName()),
+        concatMap(() => this.model.checkConnection()),
+        concatMap(() => this.dumpexport()))
+      .subscribe(res => {
+        console.log('submitted', res);
+        this.submitted = false;
+        this.success = true;
+        this._cdRef.detectChanges();
+        console.log(this.submitted);
+      }, res => {
+        console.log('Verbindung fehlgeschlagen: ' + res);
+        this.submitted = false;
+        this.failed = true;
+        this._cdRef.detectChanges();
+      });
+    /*this.model.checkConnection()
+      .pipe(concatMap(() => this.dumpexport()))
+      .subscribe(res => {
+        console.log('submitted', res);
+        this.submitted = false;
+      }, res => {
+        this.submitted = false;
+        console.log('Verbindung fehlgeschlagen:' + res);
+      });*/
+  }
 
-    dumpexport(): Observable<ChildProcess> {
-        console.log('Dump-Export');
-        const commandLine = `expdp ${this.model.username}/${this.model.password}@${this.model.db} SCHEMAS=${this.model.schemaname} DUMPFILE=${this.model.dump}`;
-        console.log(commandLine);
-        const bat: ChildProcess = spawn('cmd.exe', ['/c', commandLine]);
+  dumpexport(): Observable<ChildProcess> {
+    console.log('Dump-Export');
+    const commandLine = `expdp ${this.model.username}/${this.model.password}@${this.model.db} SCHEMAS=${this.model.schemaname} DUMPFILE=${this.model.dump}`;
+    console.log(commandLine);
+    const bat: ChildProcess = spawn('cmd.exe', ['/c', commandLine]);
 
-        return new Observable(obs => {
-            bat.stdout.on('data', (data) => {
-                console.log(data.toString());
-            });
+    return new Observable(obs => {
+      bat.stdout.on('data', (data) => {
+        console.log(data.toString());
+      });
 
-            bat.stderr.on('data', (data) => {
-                console.log(data.toString());
-            });
+      bat.stderr.on('data', (data) => {
+        console.log(data.toString());
+      });
 
-            bat.on('exit', (code) => {
-                console.log('Child exited with code ${code}');
-                obs.next(bat);
-                obs.complete();
-            });
+      bat.on('exit', (code) => {
+        console.log('Child exited with code ${code}');
+        obs.next(bat);
+        obs.complete();
+      });
 
-        });
-    }
+    });
+  }
 
-    constructor(private _cdRef: ChangeDetectorRef) {
-    }
+  constructor(private _cdRef: ChangeDetectorRef) {
+  }
 
-    ngOnInit() {
-    }
+  ngOnInit() {
+  }
 
 }
