@@ -28,14 +28,15 @@ export class DumpImportComponent implements OnInit {
         this.submitted = true;
 
         this.model.setTnsHostName()
-            .pipe(concatMap(() => this.model.setTnsServiceName()))
-            .pipe(concatMap(() => this.model.checkConnection()))
-            .pipe(concatMap(() => this.model.dropUser()))
-            .pipe(concatMap(() => this.dumpimport()))
-            .pipe(concatMap(() => this.model.changePasswordfromUser()))
-            .pipe(concatMap(() => this.executePackDS()))
-            .pipe(concatMap(() => this.compileInvalidObjects()))
-            .pipe(concatMap(() => this.model.checkInvalidObjects()))
+            .pipe(concatMap(() => this.model.setTnsServiceName()),
+                concatMap(() => this.model.checkConnection()),
+                concatMap(() => this.model.checkIfUserExist()),
+                concatMap(() => this.model.dropUser()),
+                concatMap(() => this.dumpimport()),
+                concatMap(() => this.model.changePasswordfromUser()),
+                concatMap(() => this.executePackDS()),
+                concatMap(() => this.compileInvalidObjects()),
+                concatMap(() => this.model.checkInvalidObjects()))
             .subscribe(res => {
                 console.log('submitted', res);
                 this.submitted = false;

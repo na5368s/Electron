@@ -7,17 +7,17 @@
       <div>
         <div class="form-group col s3">
           <label for="username" class="control-label required">Enter System-Username</label>
-          <input style="text-align: center" type="text" class="form-control" id="username" required [(ngModel)]="model.username"
+          <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="username" required [(ngModel)]="model.username"
                  name="username" placeholder="fk">
         </div>
         <div class="form-group col s3">
           <label for="password">Enter Password</label>
-          <input style="text-align: center" type="password" class="form-control" id="password" required [(ngModel)]="model.password"
+          <input [disabled]="submitted" style="text-align: center" type="password" class="form-control" id="password" required [(ngModel)]="model.password"
                  name="password" placeholder="fk">
         </div>
         <div class="form-group col s3">
           <label for="db">Enter DB-Instance</label>
-          <input style="text-align: center" type="text" class="form-control" id="db" required [(ngModel)]="model.db" name="db"
+          <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="db" required [(ngModel)]="model.db" name="db"
                  placeholder="orafk">
         </div>
       </div>
@@ -26,13 +26,13 @@
       <h5>Export-Data:</h5>
       <div class="form-group">
         <label for="schemaname" class="control-label required">Enter From-Username</label>
-        <input style="text-align: center" type="text" class="form-control" id="schemaname" required [(ngModel)]="model.schemaname"
+        <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="schemaname" required [(ngModel)]="model.schemaname"
                name="schemaname"
                placeholder="full_exp">
       </div>
       <div class="form-group">
         <label for="dump" class="control-label required">Dumpfile-Name</label>
-        <input style="text-align: center" type="text" class="form-control" id="dump" required [(ngModel)]="model.dump" name="dump"
+        <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="dump" required [(ngModel)]="model.dump" name="dump"
                placeholder="full_exp">
       </div>
     </div>

@@ -14,6 +14,7 @@ export class Connection {
     tnsPath;
     tns1 = '(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = DESKTOP-DO16BSK)';
     tns2 = '(PORT = 1521))(CONNECT_DATA = (SERVER = DEDICATED)(SERVICE_NAME = XE)))';
+    userexist = false;
 
     constructor(public username: string,
                 public password: string,
@@ -97,6 +98,39 @@ export class Connection {
         });
     }
 
+    checkIfUserExist(): Observable<any> {
+        console.log('Drop User for Schema: ' + this.schemaname);
+        const knex = _knex({
+            client: 'oracledb',
+            connection: {
+                host: /*'srv-db-fls'*/ this.hostname,
+                user: this.username,
+                password: this.password,
+                database: /*'FLSKDDB.FLS.DE'*/ this.servicename,
+                // connectString: this.tns1 + this.tns2,
+            }
+        });
+
+        const temp = this;
+
+        const result = fromPromise(knex.raw('select username as id from all_users where username = \'' + (this.schemaname).toUpperCase() + '\'').then(function (res) {
+            console.log('Check if User exists');
+            if (res.length > 0) {
+                console.log('User exist');
+                temp.userexist = true;
+
+            } else {
+                console.log('User doesnt exist');
+            }
+        }))
+            .pipe(catchError(err => {
+                    console.log(err);
+                    return Observable.throw(err);
+                }));
+
+        return result;
+    }
+
     dropUser(): Observable<any> {
         console.log('Drop User for Schema: ' + this.schemaname);
         const knex = _knex({
@@ -110,7 +144,19 @@ export class Connection {
             }
         });
 
-        return fromPromise(knex.raw('DROP USER ' + this.schemaname + ' CASCADE'))
+        console.log('check user variable: ' + this.userexist);
+
+        if (this.userexist) {
+            return fromPromise(knex.raw('DROP USER ' + (this.schemaname).toUpperCase() + ' CASCADE'))
+                .pipe(catchError(err => {
+                        console.log(err);
+                        return Observable.throw(err);
+                    }),
+                    tap(console.log));
+        }
+
+        // FALLS USER NICHT ENTHALTEN nichts zurückgeben überbrückt !!! MUSS GEÄNDERT WERDEN
+        return fromPromise(knex.raw('select sysdate from dual'))
             .pipe(
                 catchError(err => {
                     console.log(err);

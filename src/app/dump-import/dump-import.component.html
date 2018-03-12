@@ -6,17 +6,17 @@
           <h5>Login-Credentials:</h5>
             <div class="form-group col s3">
                 <label for="username" class="control-label required">Enter System-Username</label>
-                <input style="text-align: center" type="text" class="form-control" id="username" required [(ngModel)]="model.username"
+                <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="username" required [(ngModel)]="model.username"
                        name="username" placeholder="fkbaro">
             </div>
             <div class="form-group col s3">
                 <label for="password">Enter Password</label>
-                <input style="text-align: center" type="password" class="form-control" id="password" required [(ngModel)]="model.password"
+                <input [disabled]="submitted" style="text-align: center" type="password" class="form-control" id="password" required [(ngModel)]="model.password"
                        name="password" placeholder="fkbaro">
             </div>
             <div class="form-group col s3">
                 <label for="db">Enter DB-Instance</label>
-                <input style="text-align: center" type="text" class="form-control" id="db" required [(ngModel)]="model.db" name="db"
+                <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="db" required [(ngModel)]="model.db" name="db"
                        placeholder="flskddb">
             </div>
         </div>
@@ -24,17 +24,17 @@
           <h5>Import-Data:</h5>
             <div class="form-group col s3">
                 <label for="extusername" class="control-label required">Enter From-Username</label>
-                <input style="text-align: center" type="text" class="form-control" id="extusername" required [(ngModel)]="model.fromuser"
+                <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="extusername" required [(ngModel)]="model.fromuser"
                        name="extusername" placeholder="fk">
             </div>
           <div class="form-group col s3">
             <label for="schemaname" class="control-label required">Enter To-Username</label>
-            <input style="text-align: center" type="text" class="form-control" id="schemaname" required [(ngModel)]="model.schemaname"
+            <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="schemaname" required [(ngModel)]="model.schemaname"
                    name="schemaname" placeholder="fk">
           </div>
           <div class="form-group">
             <label for="dump" class="control-label required">Dumpfile</label>
-            <input style="text-align: center" type="text" class="form-control" id="dump" required [(ngModel)]="model.dump" name="dump"
+            <input [disabled]="submitted" style="text-align: center" type="text" class="form-control" id="dump" required [(ngModel)]="model.dump" name="dump"
                    placeholder="full_imp.dmp">
           </div>
         </div>
